@@ -34,3 +34,5 @@ out/
 
 ### VS Code ###
 .vscode/
+/server/libraryData.trace.db
+/.kotlin/sessions/kotlin-compiler-7810604685668147149.salive
