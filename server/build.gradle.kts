@@ -49,6 +49,7 @@ dependencies {
     implementation(libs.h2)
     implementation("io.ktor:ktor-server-html-builder")
     implementation("org.jetbrains.kotlinx:kotlinx-html:$kotlinx_html_version")
+    implementation("io.ktor:ktor-htmx")
     implementation("io.ktor:ktor-server-htmx")
     implementation("io.ktor:ktor-htmx-html")
     implementation("io.ktor:ktor-server-auth")
@@ -60,4 +61,5 @@ dependencies {
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
     implementation("io.ktor:ktor-server-status-pages:${ktor_version}")
     implementation("org.jetbrains.kotlinx:dataframe:1.0.0-Beta4")
+    implementation("io.github.allangomes:kotlinwind-css:0.1.0")
 }
