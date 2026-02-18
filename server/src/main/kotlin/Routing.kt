@@ -1,48 +1,46 @@
 package leeds.compsci
 
+import book.BookService
+import common.LayoutTemplate
 import io.ktor.server.application.Application
-import io.ktor.server.html.respondHtml
 import io.ktor.server.http.content.staticResources
 import io.ktor.server.routing.get
 import io.ktor.server.routing.routing
-import kotlinx.html.head
-import kotlinx.html.body
 import kotlinx.html.h1
-import kotlinx.html.title
-import kotlinx.html.ul
 import kotlinx.html.td
 import kotlinx.html.tr
 import kotlinx.html.table
-import kotlinx.html.li
-import common.csvDataToDb
-import org.jetbrains.kotlinx.dataframe.DataFrame
-import org.jetbrains.kotlinx.dataframe.api.schema
-import org.jetbrains.kotlinx.dataframe.io.read
+import io.ktor.server.html.respondHtmlTemplate
+import org.jetbrains.exposed.v1.jdbc.transactions.transaction
 
-fun Application.configureRouting() {
+suspend fun Application.configureRouting() {
+    val bookService = BookService()
+    val books = bookService.getAllBooks()
+
     routing {
         staticResources("/", "/web")
 
         get("/") {
-            val dir = "/Users/muhammadrauf/Documents/Dev Projects/library-project-2850/server/src/"
-            val bookData = DataFrame.read("${dir}main/resources/booklist.csv")
-            call.respondHtml {
-                head {
-                    title("Library")
-                }
+            call.respondHtmlTemplate(LayoutTemplate()) {
+                titleText { +"Library" }
 
-                body {
+                content {
                     h1 { +"Welcome to the Library" }
-                    ul { bookData.schema().columns.forEach { li { +"${it.key}" } } }
                     table {
-                        val data = csvDataToDb()
-
                         tr {
+                            td { +"Title" }
+                            td { +"Isbn"}
                             td { +"Author" }
                         }
 
-                        data.forEach {
-                            tr { td { +"${it.toString()}" } }
+                        books.forEach { book ->
+                            tr {
+                                td { +book.key.title }
+                                td { if (book.key.isbn == "0") +"N/A" else +book.key.isbn }
+                                transaction {
+                                    td { +book.value.name }
+                                }
+                            }
                         }
                     }
                 }

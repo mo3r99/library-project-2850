@@ -11,14 +11,13 @@ import org.jetbrains.exposed.v1.core.eq
 import org.jetbrains.exposed.v1.jdbc.Database
 import org.jetbrains.exposed.v1.jdbc.SchemaUtils
 import org.jetbrains.exposed.v1.jdbc.transactions.TransactionManager
-import org.jetbrains.exposed.v1.jdbc.transactions.transaction
+import org.jetbrains.exposed.v1.jdbc.transactions.suspendTransaction
 import org.jetbrains.kotlinx.dataframe.DataFrame
 import org.jetbrains.kotlinx.dataframe.annotations.ColumnName
 import org.jetbrains.kotlinx.dataframe.annotations.DataSchema
 import org.jetbrains.kotlinx.dataframe.api.cast
 import org.jetbrains.kotlinx.dataframe.api.distinct
 import org.jetbrains.kotlinx.dataframe.api.forEach
-import org.jetbrains.kotlinx.dataframe.api.rows
 import org.jetbrains.kotlinx.dataframe.api.select
 import org.jetbrains.kotlinx.dataframe.api.values
 import org.jetbrains.kotlinx.dataframe.io.read
@@ -37,23 +36,23 @@ interface DataFrameType {
     @ColumnName("format_code")
     val formatCode: String
     @ColumnName("isbn_13")
-    val isbn13: Double?
+    val isbn13: String?
     @ColumnName("location_code")
     val locationCode: String?
     val notes: String?
     val title: String
 }
 
-fun Application.configureDatabases() {
+suspend fun Application.configureDatabases() {
     TransactionManager.defaultDatabase = LibraryDatabase.db
-    seedDatabase()
+    //seedDatabase()
 }
 
-fun Application.seedDatabase() {
+suspend fun Application.seedDatabase() {
     val dir = "/Users/muhammadrauf/Documents/Dev Projects/library-project-2850/server/src/"
     val df = DataFrame.read("${dir}main/resources/booklist.csv").cast<DataFrameType>()
 
-    transaction {
+    suspendTransaction {
         SchemaUtils.create(BookTable, UserTable, AuthorTable, CopyTable)
 
         df.select("author").distinct().values().forEach {
@@ -63,18 +62,16 @@ fun Application.seedDatabase() {
             }
         }
 
-        df.select("author", "isbn_13", "author").distinct().forEach { row ->
+        df.select("title", "isbn_13", "author").distinct().forEach { row ->
             val book = Book.new {
                 title = row["title"].toString()
-                isbn = row["isbn_13"].toString()
-                authorId = Author.find {
-                    AuthorTable.name eq row["author"].toString()
-                }.first()
+                isbn = (row["isbn_13"]?.toString() ?: "0").toBigDecimal().toLong().toString()
+                author = Author.find { AuthorTable.name eq row["author"].toString() }.first()
             }
         }
 
         df.forEach { row ->
-            val isbn = row["isbn_13"].toString()
+            val isbn = (row["isbn_13"]?.toString() ?: "0").toBigDecimal().toLong().toString()
             val matchingBook = Book.find { BookTable.isbn eq isbn }.first()
 
             Copy.new {

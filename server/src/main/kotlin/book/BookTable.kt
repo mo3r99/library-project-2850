@@ -3,8 +3,8 @@ package book
 import author.AuthorTable
 import org.jetbrains.exposed.v1.core.dao.id.IntIdTable
 
-const val MAX_NAME_LENGTH = 50
-const val MAX_ISBN_LENGTH = 13
+const val MAX_NAME_LENGTH = 230
+const val MAX_ISBN_LENGTH = 17
 
 object BookTable: IntIdTable("book") {
     var title = varchar("title", MAX_NAME_LENGTH)
