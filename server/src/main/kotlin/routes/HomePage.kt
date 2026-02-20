@@ -9,23 +9,17 @@ import io.github.allangomes.kotlinwind.css.kw
 import io.ktor.htmx.html.hx
 import io.ktor.server.application.ApplicationCall
 import io.ktor.server.html.respondHtmlTemplate
-import kotlinx.html.InputType
 import kotlinx.html.a
 import kotlinx.html.button
 import kotlinx.html.classes
 import kotlinx.html.div
 import kotlinx.html.form
 import kotlinx.html.h1
-import kotlinx.html.h2
 import kotlinx.html.h3
 import kotlinx.html.id
-import kotlinx.html.input
 import kotlinx.html.p
 import kotlinx.html.style
-import kotlinx.html.table
-import kotlinx.html.td
 import kotlinx.html.textInput
-import kotlinx.html.tr
 
 suspend fun ApplicationCall.homeRoute() {
     val bookService = BookService()
@@ -47,10 +41,10 @@ suspend fun ApplicationCall.homeRoute() {
             div {
                 form {
                     attributes.hx {
-                        post = "/search"
+                        get = "/search"
                         target = "#book-list"
                         swap = "innerHTML"
-                        trigger = "keyup"
+                        trigger = "submit changed"
                     }
 
                     style = kw.inline {
@@ -62,7 +56,15 @@ suspend fun ApplicationCall.homeRoute() {
                         height["57px"]
                     }
 
-                    textInput(name = "search") { placeholder = "Search for books" }
+                    textInput(name = "search") {
+                        attributes.hx {
+                            get = "/search"
+                            target = "#book-list"
+                            swap = "innerHTML"
+                            trigger = "keyup changed delay:200ms"
+                        }
+                        placeholder = "Search for books"
+                    }
                     button { +"Search" }
                 }
             }
