@@ -1,8 +1,10 @@
 package leeds.compsci
 
-import io.ktor.server.application.*
-import io.ktor.server.http.content.*
-import io.ktor.server.routing.*
+import io.ktor.server.application.Application
+import io.ktor.server.http.content.staticResources
+import io.ktor.server.routing.get
+import io.ktor.server.routing.routing
+import leeds.compsci.routes.bookDetailRoute
 import leeds.compsci.routes.homeRoute
 import leeds.compsci.routes.searchRoute
 
@@ -12,5 +14,6 @@ fun Application.configureRouting() {
 
         get("/") { call.homeRoute() }
         get("/search") { call.searchRoute() }
+        get("/book/{id}") { call.bookDetailRoute() }
     }
 }
