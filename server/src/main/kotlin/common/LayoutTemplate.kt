@@ -3,8 +3,17 @@ package common
 import io.ktor.server.html.Placeholder
 import io.ktor.server.html.Template
 import io.ktor.server.html.insert
-import kotlinx.html.*
-
+import kotlinx.html.HTML
+import kotlinx.html.TITLE
+import kotlinx.html.FlowContent
+import kotlinx.html.head
+import kotlinx.html.meta
+import kotlinx.html.link
+import kotlinx.html.script
+import kotlinx.html.ScriptType
+import kotlinx.html.title
+import kotlinx.html.body
+import kotlinx.html.main
 class LayoutTemplate : Template<HTML> {
     val titleText = Placeholder<TITLE>()
     val content = Placeholder<FlowContent>()

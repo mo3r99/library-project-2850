@@ -1,5 +1,6 @@
 package leeds.compsci.routes
 
+import book.Book
 import book.BookService
 import common.LayoutTemplate
 import io.github.allangomes.kotlinwind.css.LG
@@ -25,6 +26,10 @@ suspend fun ApplicationCall.homeRoute() {
     val bookService = BookService()
     val books = bookService.getAllBooksWithAuthors()
 
+    renderHomePage(books)
+}
+
+suspend fun ApplicationCall.renderHomePage(books: Map<Book, String>) {
     respondHtmlTemplate(LayoutTemplate()) {
         titleText { +"Library" }
 
