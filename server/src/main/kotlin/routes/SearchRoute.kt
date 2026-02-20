@@ -19,7 +19,7 @@ import kotlinx.html.stream.appendHTML
 import kotlinx.html.style
 
 suspend fun ApplicationCall.searchRoute() {
-    val query = parameters["search"].toString()
+    val query = request.queryParameters["search"].toString()
 
     val booksService = BookService()
 
