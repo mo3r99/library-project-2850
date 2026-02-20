@@ -1,5 +1,10 @@
 package book
 
+import author.Author
+import author.AuthorTable
+import copy.Copy
+import copy.CopyTable
+import org.jetbrains.exposed.v1.core.eq
 import org.jetbrains.exposed.v1.core.like
 import org.jetbrains.exposed.v1.core.lowerCase
 import org.jetbrains.exposed.v1.jdbc.transactions.suspendTransaction
@@ -23,5 +28,15 @@ class BookService {
         }
 
         return books
+    }
+
+    suspend fun getBookById(id: Int): Triple<Book, Author, List<Copy>> {
+        return suspendTransaction {
+            val book = Book.findById(id) ?: throw IllegalArgumentException("Book with id $id does not exist")
+            val author = Author.find { AuthorTable.id eq book.id }.first()
+            val copies = Copy.find { CopyTable.book eq book.id }.toList()
+
+            Triple(book, author, copies)
+        }
     }
 }
