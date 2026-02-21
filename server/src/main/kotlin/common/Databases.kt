@@ -6,6 +6,7 @@ import book.Book
 import book.BookTable
 import copy.Copy
 import copy.CopyTable
+import copy.Status
 import io.ktor.server.application.Application
 import org.jetbrains.exposed.v1.core.eq
 import org.jetbrains.exposed.v1.jdbc.Database
@@ -79,6 +80,7 @@ suspend fun Application.seedDatabase() {
                 formatCode = row["format_code"].toString()
                 locationCode = row["location_code"]?.toString() ?: ""
                 notes = row["notes"]?.toString() ?: ""
+                status = Status.AVAILABLE
             }
         }
     }

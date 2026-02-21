@@ -12,4 +12,5 @@ class Copy (id: EntityID<Int>): IntEntity(id) {
     var formatCode by CopyTable.formatCode
     var locationCode by CopyTable.locationCode
     var notes by CopyTable.notes
+    var status by CopyTable.status
 }
