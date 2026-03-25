@@ -1,20 +1,28 @@
 package common
 
+import io.github.allangomes.kotlinwind.css.kw
 import io.ktor.server.html.Placeholder
 import io.ktor.server.html.Template
 import io.ktor.server.html.insert
-import kotlinx.html.HTML
-import kotlinx.html.TITLE
 import kotlinx.html.FlowContent
-import kotlinx.html.head
-import kotlinx.html.meta
-import kotlinx.html.link
-import kotlinx.html.script
+import kotlinx.html.HTML
 import kotlinx.html.ScriptType
-import kotlinx.html.title
+import kotlinx.html.TITLE
+import kotlinx.html.a
 import kotlinx.html.body
+import kotlinx.html.h4
+import kotlinx.html.head
+import kotlinx.html.link
 import kotlinx.html.main
-class LayoutTemplate : Template<HTML> {
+import kotlinx.html.meta
+import kotlinx.html.nav
+import kotlinx.html.script
+import kotlinx.html.style
+import kotlinx.html.title
+
+class LayoutTemplate(
+    val loggedIn: Boolean,
+) : Template<HTML> {
     val titleText = Placeholder<TITLE>()
     val content = Placeholder<FlowContent>()
 
@@ -32,6 +40,20 @@ class LayoutTemplate : Template<HTML> {
         }
         body {
             main(classes = "container") {
+                nav {
+                    style =
+                        kw.inline {
+                            flex.row.justify_between
+                        }
+                    h4 { +"2850 Library" }
+
+                    if (!loggedIn) {
+                        a {
+                            href = "/login"
+                            +"Log in"
+                        }
+                    }
+                }
                 insert(content)
             }
         }

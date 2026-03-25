@@ -1,4 +1,4 @@
-package leeds.compsci.routes
+package routes
 
 import book.BookService
 import common.LayoutTemplate
@@ -8,21 +8,25 @@ import io.ktor.htmx.html.HxAttributes
 import io.ktor.htmx.html.hx
 import io.ktor.server.application.ApplicationCall
 import io.ktor.server.html.respondHtmlTemplate
+import io.ktor.server.sessions.get
+import io.ktor.server.sessions.sessions
+import io.ktor.utils.io.ExperimentalKtorApi
 import kotlinx.html.a
+import kotlinx.html.classes
+import kotlinx.html.div
 import kotlinx.html.h1
 import kotlinx.html.h3
 import kotlinx.html.h4
+import kotlinx.html.img
+import kotlinx.html.span
 import kotlinx.html.style
 import kotlinx.html.table
 import kotlinx.html.td
 import kotlinx.html.th
 import kotlinx.html.tr
-import io.ktor.htmx.html.hx
-import io.ktor.utils.io.ExperimentalKtorApi
-import kotlinx.html.classes
-import kotlinx.html.div
-import kotlinx.html.img
-import kotlinx.html.span
+import uk.co.almasjid.server.authentication.sessions.UserSession
+import uk.co.almasjid.server.authentication.sessions.checkUserSession
+import user.Role
 
 @OptIn(ExperimentalKtorApi::class)
 suspend fun ApplicationCall.bookDetailRoute() {
@@ -31,61 +35,78 @@ suspend fun ApplicationCall.bookDetailRoute() {
     val bookService = BookService()
     val bookDetail = bookService.getBookById(id)
 
-    respondHtmlTemplate(LayoutTemplate()) {
+    val isLoggedIn = sessions.get<UserSession>() != null
+    val isStaff = sessions.get<UserSession>()?.role == Role.STAFF
+
+    respondHtmlTemplate(LayoutTemplate(isLoggedIn)) {
         titleText { bookDetail.first.title }
 
         content {
             a {
                 href = "/"
-                +"Go back home"
+                +"Go back home\n"
             }
 
-            h1 {
-                style = kw.inline {
-                    margin.top[8]
+            if (isStaff) {
+                a {
+                    href = "/edit/$id"
+                    +"Edit book"
                 }
+            }
+            h1 {
+                style =
+                    kw.inline {
+                        margin.top[8]
+                    }
 
-                +bookDetail.first.title }
+                +bookDetail.first.title
+            }
             h4 { +"By ${bookDetail.second.name}" }
 
             div {
                 classes = setOf("copies")
                 h3 {
-                    style = kw.inline {
-                        margin.top[8]
-                    }
+                    style =
+                        kw.inline {
+                            margin.top[8]
+                        }
 
                     +"Available copies:"
                 }
                 table {
-                    style = kw.inline {
-                        margin.top[4]
-                    }
+                    style =
+                        kw.inline {
+                            margin.top[4]
+                        }
                     tr {
                         th {
-                            style = kw.inline {
-                                font.bold
-                            }
+                            style =
+                                kw.inline {
+                                    font.bold
+                                }
                             +"Location Code"
                         }
                         th {
-                            style = kw.inline {
-                                font.bold
-                            }
+                            style =
+                                kw.inline {
+                                    font.bold
+                                }
                             +"Format Code"
                         }
 
                         th {
-                            style = kw.inline {
-                                font.bold
-                            }
+                            style =
+                                kw.inline {
+                                    font.bold
+                                }
                             +"Notes"
                         }
 
                         th {
-                            style = kw.inline {
-                                font.bold
-                            }
+                            style =
+                                kw.inline {
+                                    font.bold
+                                }
                             +"Reserve"
                         }
                     }

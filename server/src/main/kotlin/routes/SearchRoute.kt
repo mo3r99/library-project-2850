@@ -1,4 +1,4 @@
-package leeds.compsci.routes
+package routes
 
 import book.Book
 import book.BookService
@@ -40,20 +40,22 @@ suspend fun ApplicationCall.searchRoute() {
         respondHtmlFragment {
             books.forEach { book ->
                 div {
-                    style = kw.inline {
-                        background.color["aliceblue"]
-                        padding.all[LG]
-                        max_width["350px"]
-                        min_width["200px"]
-                        margin.all[SM]
-                        border.rounded[SM]
-                    }
+                    style =
+                        kw.inline {
+                            background.color["aliceblue"]
+                            padding.all[LG]
+                            max_width["350px"]
+                            min_width["200px"]
+                            margin.all[SM]
+                            border.rounded[SM]
+                        }
                     h3 { +book.key.title }
                     p { +book.value }
                     a {
-                        style = kw.inline {
-                            font.sm
-                        }
+                        style =
+                            kw.inline {
+                                font.sm
+                            }
                         href = "/book/${book.key.id}"
                         +"See More"
                     }

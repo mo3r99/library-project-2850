@@ -1,10 +1,10 @@
-package leeds.compsci.routes
+package routes
 
 import book.BookService
+import copy.CopyService
 import copy.Status
 import io.ktor.server.application.ApplicationCall
 import io.ktor.server.html.respondHtmlFragment
-import leeds.compsci.copy.CopyService
 
 suspend fun ApplicationCall.reserveRoute() {
     val bookId: Int = parameters["bookId"]?.toInt() ?: throw IllegalArgumentException("Invalid bookId parameter")

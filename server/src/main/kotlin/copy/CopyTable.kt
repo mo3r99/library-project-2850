@@ -8,7 +8,9 @@ const val LOCATION_CODE_LENGTH = 30
 const val MAX_NOTE_LENGTH = 255
 
 enum class Status {
-    AVAILABLE, RESERVED, LOST
+    AVAILABLE,
+    RESERVED,
+    LOST,
 }
 
 object CopyTable : IntIdTable() {

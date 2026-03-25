@@ -34,10 +34,13 @@ object LibraryDatabase {
 @DataSchema
 interface DataFrameType {
     val author: String
+
     @ColumnName("format_code")
     val formatCode: String
+
     @ColumnName("isbn_13")
     val isbn13: String?
+
     @ColumnName("location_code")
     val locationCode: String?
     val notes: String?
@@ -46,7 +49,7 @@ interface DataFrameType {
 
 suspend fun Application.configureDatabases() {
     TransactionManager.defaultDatabase = LibraryDatabase.db
-    //seedDatabase()
+    // seedDatabase()
 }
 
 suspend fun Application.seedDatabase() {
@@ -64,11 +67,12 @@ suspend fun Application.seedDatabase() {
         }
 
         df.select("title", "isbn_13", "author").distinct().forEach { row ->
-            val book = Book.new {
-                title = row["title"].toString()
-                isbn = (row["isbn_13"]?.toString() ?: "0").toBigDecimal().toLong().toString()
-                author = Author.find { AuthorTable.name eq row["author"].toString() }.first()
-            }
+            val book =
+                Book.new {
+                    title = row["title"].toString()
+                    isbn = (row["isbn_13"]?.toString() ?: "0").toBigDecimal().toLong().toString()
+                    author = Author.find { AuthorTable.name eq row["author"].toString() }.first()
+                }
         }
 
         df.forEach { row ->

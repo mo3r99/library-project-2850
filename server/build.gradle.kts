@@ -10,8 +10,8 @@ plugins {
     kotlin("jvm") version "2.3.0"
     id("io.ktor.plugin") version "3.4.0"
     id("org.jetbrains.kotlin.plugin.serialization") version "2.3.0"
-    id("dev.detekt") version "2.0.0-alpha.2"
-    //kotlin("plugin.dataframe") version "2.3.0"
+    // id("dev.detekt") version "2.0.0-alpha.2"
+    // kotlin("plugin.dataframe") version "2.3.0"
 }
 
 application {
@@ -57,9 +57,11 @@ dependencies {
     implementation("ch.qos.logback:logback-classic:$logback_version")
     implementation("io.ktor:ktor-server-config-yaml")
     implementation("io.ktor:ktor-server-host-common:3.4.0")
+    implementation("io.ktor:ktor-server-sessions:3.4.0")
     testImplementation("io.ktor:ktor-server-test-host")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
     implementation("io.ktor:ktor-server-status-pages:${ktor_version}")
     implementation("org.jetbrains.kotlinx:dataframe:1.0.0-Beta4")
     implementation("io.github.allangomes:kotlinwind-css:0.1.0")
+    implementation("com.password4j:password4j:1.8.4")
 }

@@ -30,13 +30,12 @@ class BookService {
         return books
     }
 
-    suspend fun getBookById(id: Int): Triple<Book, Author, List<Copy>> {
-        return suspendTransaction {
+    suspend fun getBookById(id: Int): Triple<Book, Author, List<Copy>> =
+        suspendTransaction {
             val book = Book.findById(id) ?: throw IllegalArgumentException("Book with id $id does not exist")
             val author = Author.find { AuthorTable.id eq book.id }.first()
             val copies = Copy.find { CopyTable.book eq book.id }.toList()
 
             Triple(book, author, copies)
         }
-    }
 }

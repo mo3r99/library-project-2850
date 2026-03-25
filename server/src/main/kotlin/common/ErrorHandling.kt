@@ -6,17 +6,17 @@ import io.ktor.server.application.install
 import io.ktor.server.html.respondHtml
 import io.ktor.server.plugins.statuspages.StatusPages
 import io.ktor.server.response.respondText
-import kotlinx.html.head
-import kotlinx.html.title
 import kotlinx.html.body
-import kotlinx.html.main
 import kotlinx.html.h1
+import kotlinx.html.head
+import kotlinx.html.main
 import kotlinx.html.p
+import kotlinx.html.title
 
 fun Application.configureErrorHandling() {
     install(StatusPages) {
         exception<Throwable> { call, cause ->
-            call.respondText(text = "500: $cause" , status = HttpStatusCode.InternalServerError)
+            call.respondText(text = "500: $cause", status = HttpStatusCode.InternalServerError)
         }
 
         status(HttpStatusCode.NotFound) {

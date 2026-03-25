@@ -6,7 +6,7 @@ import org.jetbrains.exposed.v1.core.dao.id.IntIdTable
 const val MAX_NAME_LENGTH = 230
 const val MAX_ISBN_LENGTH = 17
 
-object BookTable: IntIdTable("book") {
+object BookTable : IntIdTable("book") {
     var title = varchar("title", MAX_NAME_LENGTH)
     var author = reference("author_id", AuthorTable)
     var isbn = varchar("isbn", MAX_ISBN_LENGTH).uniqueIndex()
